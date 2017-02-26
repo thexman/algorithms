@@ -13,5 +13,8 @@ public interface Arithmetic<T> {
 	public T zero();
 	public Comparator<T> comparator();
 	
+	default int compare(T a, T b) {
+		return comparator().compare(a, b);
+	}
 	
 }

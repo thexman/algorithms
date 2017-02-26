@@ -6,20 +6,23 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Heap<T> {
-	private final List<T> heap = new ArrayList<>();
-	private final Comparator<T> comparator;
-	private final T minValue;
+	protected final List<T> heap;
+	protected final Comparator<T> comparator;
 	
-	public Heap(T minValue, Comparator<T> comparator, List<T> list) {
+	protected Heap(List<T> list, Comparator<T> comparator) {
 		this.comparator = comparator;
-		this.minValue = minValue;
-		heap.addAll(list);
+		heap = list;
+	}
+	
+	public Heap(Comparator<T> comparator, List<T> list) {
+		this.comparator = comparator;
+		heap = list;
 		buildHeap();
 	}
 	
 	@SafeVarargs
-	public Heap(T minValue, Comparator<T> comparator, T...elements) {
-		this(minValue, comparator, Arrays.asList(elements));
+	public Heap(Comparator<T> comparator, T...elements) {
+		this(comparator, new ArrayList<T>(Arrays.asList(elements)));
 	}
 	
 	protected int left(int i) {
@@ -38,6 +41,10 @@ public class Heap<T> {
 		final T t = heap.get(i);
 		heap.set(i, heap.get(j));
 		heap.set(j, t);
+	}
+	
+	protected T remove(int i) {
+		return heap.remove(i);
 	}
 	
 	public void heapify(int i) {
@@ -99,10 +106,11 @@ public class Heap<T> {
 	public T removeTop() {
 		final T max = heap.get(0);
 		if (heap.size() > 1) {
-			heap.set(0, heap.remove(heap.size()-1));
+			exchange(0, heap.size()-1);
+			remove(heap.size()-1);
 			heapify(0);
-		} else {
-			heap.remove(0);
+		} else if (heap.size() > 0){
+			remove(0);
 		}
 		return max;
 	}
@@ -122,18 +130,23 @@ public class Heap<T> {
 		if (cmp < 0) {
 			heapify(i);
 		} else if (cmp > 0) {
-			int p = parent(i);
-			while (i != 0 && compareInd(p, i) < 0) {
-				exchange(p, i);
-				i = p;
-				p = parent(i);
-			}
+			heapifyParent(i);
+		}
+	}
+	
+
+	protected void heapifyParent(int i) {
+		int p = parent(i);
+		while (i != 0 && compareInd(p, i) < 0) {
+			exchange(p, i);
+			i = p;
+			p = parent(i);
 		}
 	}
 	
 	public void add(T newVal) {
-		heap.add(minValue);
-		change(heap.size()-1, newVal);
+		heap.add(newVal);
+		heapifyParent(heap.size() - 1);
 	}
 	
 	
@@ -145,5 +158,8 @@ public class Heap<T> {
 		return !isEmpty();
 	}
 	
-	
+	public static <T> void sort(Comparator<T> comparator, List<T> list) {
+		final Heap<T> h = new Heap<>(comparator, list);
+		h.sort();
+	}
 }
