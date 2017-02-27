@@ -1,8 +1,11 @@
 package com.a9ski.algo.graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.a9ski.algo.Edge;
 import com.a9ski.algo.IndexHeap;
@@ -85,17 +88,83 @@ public class Graph<E> {
 			if (edgeIndexes.get1() != -1) {
 				for(int i = edgeIndexes.get1(); i <= edgeIndexes.get2(); i++) {
 					final Edge<E> e = edges.get(i);
-					final E sum = arithmetic.add(dist.get(e.from), e.weight);
-					if (this.arithmetic.compare(dist.get(e.to), sum) > 0) {
-						dist.set(e.to, sum);
-						parent.set(e.to, e.from);
-						heap.valueChanged(e.to);
+					if (arithmetic.compare(dist.get(e.from), arithmetic.maxValue()) < 0) { 
+						final E sum = arithmetic.add(dist.get(e.from), e.weight);
+						if (this.arithmetic.compare(dist.get(e.to), sum) > 0) {
+							dist.set(e.to, sum);
+							parent.set(e.to, e.from);
+							heap.valueChanged(e.to);
+						}
 					}
 				}
 			}
 		}
 		
 		return Pair.of(dist, parent);
+	}
+	
+	public List<Integer> dijkstraPath(int u, int v, List<Integer> parents) {
+		final List<Integer> path = new ArrayList<>();
+		if (u != v) {
+			int p = v;
+			while(p != u && p != -1) {
+				path.add(p);
+				p = parents.get(p);			
+			}
+			if (p != -1) {
+				path.add(u);
+				Collections.reverse(path);		
+			} else {
+				path.clear();
+			}
+		}
+		return path;
+	}
+	
+	public Pair<Map<Pair<Integer, Integer>, E>, Map<Pair<Integer, Integer>, Integer>> floyd() {
+		final Map<Pair<Integer, Integer>, E> dist = new HashMap<>();
+		final Map<Pair<Integer, Integer>, Integer> next = new HashMap<>();
+		
+		for(final Edge<E> edge : edges) {
+			dist.put(Pair.of(edge.from, edge.from), arithmetic.zero());
+			dist.put(Pair.of(edge.to, edge.to), arithmetic.zero());
+			dist.put(Pair.of(edge.from, edge.to), edge.weight);
+			next.put(Pair.of(edge.from, edge.to), edge.to);
+		}
+		
+		for(int k = 0; k < vertexes.size(); k++) {
+			for(int i = 0; i < vertexes.size(); i++) {
+				for(int j = 0; j < vertexes.size(); j++) {
+					final E e1 = dist.get(Pair.of(i, k));
+					final E e2 = dist.get(Pair.of(k, j));
+					final E e3 = dist.get(Pair.of(i, j));
+					if (e1 != null && e2 != null) {
+						final E sum = arithmetic.add(e1, e2);
+						if (e3 == null || arithmetic.compare(e3, sum) > 0) {
+							dist.put(Pair.of(i, j), sum);
+							next.put(Pair.of(i, j), next.get(Pair.of(i, k)));
+						}
+					}
+				}
+			}
+		}
+		return Pair.of(dist, next);
+	}
+	
+	public List<Integer> floydPath(int u, int v, final Map<Pair<Integer, Integer>, Integer> next) {
+		final List<Integer> path = new ArrayList<>();
+		if (next.get(Pair.of(u, v)) != null) {
+			path.add(u);
+			while(u != v) {
+				u = next.get(Pair.of(u, v));
+				path.add(u);				
+			}
+		}
+		return path;
+	}
+	
+	public int vertexCount() {
+		return vertexes.size();
 	}
 	
 }
