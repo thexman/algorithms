@@ -32,4 +32,6 @@ public abstract class AbstractSort<T> {
 		return !less(a, b);
 	}
 	
+	public abstract void sort(T[] a);
+	
 }
