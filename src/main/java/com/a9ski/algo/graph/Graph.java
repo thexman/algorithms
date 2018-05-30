@@ -7,9 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.a9ski.algo.Edge;
-import com.a9ski.algo.IndexHeap;
 import com.a9ski.algo.arithmetic.Arithmetic;
+import com.a9ski.algo.heap.IndexHeap;
 import com.a9ski.algo.tuples.Pair;
 
 

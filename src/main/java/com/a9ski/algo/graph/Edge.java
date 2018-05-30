@@ -1,4 +1,4 @@
-package com.a9ski.algo;
+package com.a9ski.algo.graph;
 
 public class Edge<T> {
 	public final T weight;

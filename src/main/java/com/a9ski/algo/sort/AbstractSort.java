@@ -2,7 +2,7 @@ package com.a9ski.algo.sort;
 
 import java.util.Comparator;
 
-public abstract class AbstractSort<T> {
+public abstract class AbstractSort<T> implements Sort<T> {
 
 	protected final Comparator<T> cmp;
 	

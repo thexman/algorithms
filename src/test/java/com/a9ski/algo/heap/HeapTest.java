@@ -1,4 +1,4 @@
-package com.a9ski.algo;
+package com.a9ski.algo.heap;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +10,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import com.a9ski.algo.arithmetic.IntegerComparator;
+import com.a9ski.algo.heap.Heap;
 
 public class HeapTest {
 

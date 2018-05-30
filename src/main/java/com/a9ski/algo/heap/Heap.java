@@ -1,4 +1,4 @@
-package com.a9ski.algo;
+package com.a9ski.algo.heap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
