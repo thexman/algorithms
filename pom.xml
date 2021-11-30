@@ -4,7 +4,7 @@
 	<groupId>com.a9ski</groupId>
 	<artifactId>algorithms</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.1-SNAPSHOT</version>
 	<name>algorithms</name>
 	<url>https://github.com/thexman/algorithms</url>
 
@@ -12,7 +12,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.13.1</version>
 		</dependency>
 	</dependencies>
 	
